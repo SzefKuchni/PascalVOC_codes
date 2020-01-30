@@ -104,31 +104,10 @@ def net_architecture(path_to_model, base_model_trainable, classes):
         model.load_weights(path_to_model)
     return(model)
 
-def pascal_experiment(experiment_desc, experiment, path, batch_size, epochs, base_model_trainable, path_to_model):
+def pascal_experiment(experiment_desc, experiment, path, batch_size, epochs, base_model_trainable, path_to_model, l2_regularization, learning_rate):
 
     if not os.path.exists(experiment_desc):
         os.makedirs(experiment_desc)
-    
-    dict_class_num =  {'aeroplane'     :0,
-                       'bicycle'       :1,
-                       'bird'          :2,
-                       'boat'          :3,
-                       'bottle'        :4,
-                       'bus'           :5,
-                       'car'           :6,
-                       'cat'           :7,
-                       'chair'         :8,
-                       'cow'           :9,
-                       'dog'           :10,
-                       'horse'         :11,
-                       'monitor'       :12,
-                       'motorbike'     :13,
-                       'people'        :14,
-                       'pottedplants'  :15,
-                       'sheep'         :16,
-                       'sofa'          :17,
-                       'table'         :18,
-                       'trains'        :19}
 
     # Parameters
     params = {'dim': (224,224),
@@ -152,7 +131,7 @@ def pascal_experiment(experiment_desc, experiment, path, batch_size, epochs, bas
 
     # Design model
     
-    optimizer='rmsprop'
+    optimizer= keras.optimizers.Adam(learning_rate=learning_rate, beta_1=0.9, beta_2=0.999, amsgrad=False)
     loss='categorical_crossentropy'
     metrics=['accuracy']
     
@@ -161,6 +140,13 @@ def pascal_experiment(experiment_desc, experiment, path, batch_size, epochs, bas
         model = net_architecture(path_to_model, 
                                  base_model_trainable, 
                                  classes = params["n_classes"])
+                                 
+        for layer in model.layers:
+            condition = layer.get_config()["name"].split("_")[-1]
+            if condition == "conv":
+                layer.kernel_regularizer = regularizers.l2(l2_regularization)
+            else:
+                continue
         
         model.compile(optimizer=optimizer,
                       loss=loss,
@@ -201,6 +187,8 @@ def pascal_experiment(experiment_desc, experiment, path, batch_size, epochs, bas
         print("epochs: {}".format(epochs), file=text_file)
         print("base_model_trainable: {}".format(base_model_trainable), file=text_file)
         print("path_to_model: {}".format(path_to_model), file=text_file)
+        print("learning_rate: {}".format(learning_rate), file=text_file)
+        print("l2_regularization: {}".format(l2_regularization), file=text_file)
         print("", file=text_file)
         
         print("### Model - compilation ###", file=text_file)
