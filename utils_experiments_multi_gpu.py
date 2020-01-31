@@ -175,7 +175,7 @@ def pascal_experiment(experiment_desc, experiment, path, batch_size, epochs, bas
     plt.legend(['train', 'val'], loc='upper left')
     plt.savefig(experiment_desc+"/acc_curves.jpg")
 
-    with open(experiment_desc + "\summary.txt","w") as text_file:
+    with open(experiment_desc + "/summary.txt","w") as text_file:
         print("### Experiment ###", file=text_file)
         print("experiment_desc: {}".format(experiment_desc), file=text_file)
         print("experiment: {}".format(experiment), file=text_file)

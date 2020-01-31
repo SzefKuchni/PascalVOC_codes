@@ -7,5 +7,7 @@ batch_size = 64*4
 epochs = 20
 path_to_model = None
 base_model_trainable = True
+l2_regularization = 0.01
+learning_rate = 0.001
 
-pascal_experiment(experiment_desc, experiment, path, batch_size, epochs, base_model_trainable, path_to_model)
+pascal_experiment(experiment_desc, experiment, path, batch_size, epochs, base_model_trainable, path_to_model, l2_regularization, learning_rate)
