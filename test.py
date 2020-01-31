@@ -1,6 +1,6 @@
 from utils_experiments_multi_gpu import pascal_experiment
 
-experiment_desc = "../results/multi_gpu"
+experiment_desc = "../results/mgpu_regularization_l1_001"
 experiment = "../experiments/exp_50k_no_wrong.pkl"
 path = '../PascalVOC/img/'
 batch_size = 64*4

@@ -144,7 +144,7 @@ def pascal_experiment(experiment_desc, experiment, path, batch_size, epochs, bas
         for layer in model.layers:
             condition = layer.get_config()["name"].split("_")[-1]
             if condition == "conv":
-                layer.kernel_regularizer = regularizers.l2(l2_regularization)
+                layer.kernel_regularizer = keras.regularizers.l2(l2_regularization)
             else:
                 continue
         
